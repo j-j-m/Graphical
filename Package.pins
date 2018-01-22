@@ -1,0 +1,42 @@
+{
+  "autoPin": true,
+  "pins": [
+    {
+      "package": "Files",
+      "reason": null,
+      "repositoryURL": "https://github.com/johnsundell/files.git",
+      "version": "1.10.0"
+    },
+    {
+      "package": "Guaka",
+      "reason": null,
+      "repositoryURL": "https://github.com/oarrabi/Guaka.git",
+      "version": "0.1.3"
+    },
+    {
+      "package": "Progress",
+      "reason": null,
+      "repositoryURL": "https://github.com/jkandzi/Progress.swift",
+      "version": "0.2.0"
+    },
+    {
+      "package": "StringScanner",
+      "reason": null,
+      "repositoryURL": "https://github.com/oarrabi/StringScanner",
+      "version": "0.2.0"
+    },
+    {
+      "package": "SwiftShell",
+      "reason": null,
+      "repositoryURL": "https://github.com/kareman/SwiftShell.git",
+      "version": "3.0.1"
+    },
+    {
+      "package": "Yams",
+      "reason": null,
+      "repositoryURL": "https://github.com/jpsim/Yams.git",
+      "version": "0.3.4"
+    }
+  ],
+  "version": 1
+}
