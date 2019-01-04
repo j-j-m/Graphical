@@ -1,29 +1,12 @@
-//
-//  YAMLLoader.swift
-//  SwiftLint
-//
-//  Created by Scott Hoyt on 1/1/16.
-//  Copyright © 2016 Realm. All rights reserved.
-//
-
 import Foundation
 import Yams
 
 // MARK: - YamlParsingError
-
 internal enum YamlParserError: Error, Equatable {
     case yamlParsing(String)
 }
 
-internal func == (lhs: YamlParserError, rhs: YamlParserError) -> Bool {
-    switch (lhs, rhs) {
-    case (.yamlParsing(let x), .yamlParsing(let y)):
-        return x == y
-    }
-}
-
 // MARK: - YamlParser
-
 public struct YamlParser {
     public static func parse(_ yaml: String,
                              env: [String: String] = ProcessInfo.processInfo.environment) throws -> [String: Any] {
@@ -38,40 +21,38 @@ public struct YamlParser {
 
 private extension Constructor {
     static func swiftlintContructor(env: [String: String]) -> Constructor {
-        return Constructor(customMap(env: env))
+        return Constructor(customScalarMap(env: env))
     }
-
-    static func customMap(env: [String: String]) -> Map {
-        var map = defaultMap
+    
+    static func customScalarMap(env: [String: String]) -> ScalarMap {
+        var map = defaultScalarMap
         map[.str] = String.constructExpandingEnvVars(env: env)
         map[.bool] = Bool.constructUsingOnlyTrueAndFalse
-
+        
         return map
     }
 }
 
 private extension String {
-    static func constructExpandingEnvVars(env: [String: String]) -> (_ node: Node) -> String? {
-        return { (node: Node) -> String? in
-            assert(node.isScalar)
-            return node.scalar!.string.expandingEnvVars(env: env)
+    static func constructExpandingEnvVars(env: [String: String]) -> (_ scalar: Node.Scalar) -> String? {
+        return { (scalar: Node.Scalar) -> String? in
+            return scalar.string.expandingEnvVars(env: env)
         }
     }
-
+    
     func expandingEnvVars(env: [String: String]) -> String {
         var result = self
         for (key, value) in env {
             result = result.replacingOccurrences(of: "${\(key)}", with: value)
         }
-
+        
         return result
     }
 }
 
 private extension Bool {
-    static func constructUsingOnlyTrueAndFalse(from node: Node) -> Bool? {
-        assert(node.isScalar)
-        switch node.scalar!.string.lowercased() {
+    static func constructUsingOnlyTrueAndFalse(from scalar: Node.Scalar) -> Bool? {
+        switch scalar.string.lowercased() {
         case "true":
             return true
         case "false":
@@ -79,14 +60,5 @@ private extension Bool {
         default:
             return nil
         }
-    }
-}
-
-private extension Node {
-    var isScalar: Bool {
-        if case .scalar = self {
-            return true
-        }
-        return false
     }
 }

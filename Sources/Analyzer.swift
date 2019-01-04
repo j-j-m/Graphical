@@ -1,5 +1,6 @@
 import Foundation
 import Progress
+import Yams
 
 
 typealias RawDep = [String:Any]
@@ -27,7 +28,7 @@ class Analyzer {
             ProgressBar.defaultConfiguration = [ProgressString(string: "Parse:"), ProgressBarLine(),ProgressString(string: " | \(i+1)/\(depCount) | \(i < depCount - 1 ? "Parsing dependency info from \(d)" : "✅ Parse Complete")")]
             let p = path+d
             if let depfile = CFileWrapper.readFrom(p) {
-                do{
+                do {
                     let dep = try YamlParser.parse(depfile)
                     results.append(dep)
                 }
